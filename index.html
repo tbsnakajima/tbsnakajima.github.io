@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>中島翼 — 自己紹介クイズ</title>
+  <style>
+    body { font-family: "Noto Sans JP", sans-serif; background:#f7f7f8; color:#222; margin:0; padding:24px; }
+    .wrap { max-width:980px; margin:0 auto; }
+    header { display:flex; align-items:center; gap:16px; }
+    .badge { width:72px; height:72px; border-radius:12px; background:linear-gradient(180deg,#4b1760,#7c2a90); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; }
+    h1 { margin:0; font-size:22px; }
+    .subtitle { color:#666; margin-top:6px; font-size:14px; }
+    main { display:grid; grid-template-columns: 1fr 420px; gap:20px; margin-top:20px; }
+    .card { background:#fff; border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .profile dt { font-weight:700; color:#444; margin-top:10px; }
+    .profile dd { margin:4px 0 8px 0; color:#333; }
+
+    /* quiz styles */
+    .quiz-box { text-align:center; padding:12px; }
+    .quiz-box h2 { color:#7c2a90; margin:6px 0 10px 0; }
+    .quiz-box button { display:block; width:90%; margin:8px auto; padding:10px 12px; border-radius:8px; border:0; background:#8c4cad; color:#fff; font-weight:700; cursor:pointer; transition:all 0.2s ease; }
+    .quiz-box button:hover { background:#732c94; }
+    #quizResult { margin-top:16px; font-weight:700; }
+    #nextBtn { margin-top:12px; background:#198754; display:none; }
+    footer { margin-top:28px; color:#666; font-size:13px; text-align:center; }
+    @media (max-width:900px) {
+      main { grid-template-columns: 1fr; }
+      .quiz-box button { width:100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="badge">TW</div>
+      <div>
+        <h1>中島 翼（なかじま つばさ）</h1>
+        <div class="subtitle">自己紹介とミニクイズ</div>
+      </div>
+    </header>
+
+    <main>
+      <!-- 左：自己紹介 -->
+      <section class="card">
+        <h2>自己紹介</h2>
+        <dl class="profile">
+          <dt>名前</dt><dd>中島 翼</dd>
+          <dt>住まい</dt><dd>とちぎ</dd>
+          <dt>星座</dt><dd>獅子座</dd>
+          <dt>血液型</dt><dd>A型</dd>
+          <dt>足のサイズ</dt><dd>27cm</dd>
+        </dl>
+        <p>こんにちは。とちぎ在住の中島翼です。<br>星座は獅子座、血液型はA
