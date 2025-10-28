@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>中島翼の自己紹介クイズ</title>
+  <title>中島翼の自己紹介</title>
   <style>
     body {
       font-family: 'Noto Sans JP', sans-serif;
@@ -14,7 +14,7 @@
     h1 {
       color: #6a1b9a;
     }
-    .quiz-box {
+    .card {
       background: white;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -42,73 +42,80 @@
       margin-top: 20px;
       font-weight: bold;
     }
+    .lang-switch {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
   </style>
 </head>
 <body>
-  <h1>自己紹介クイズ</h1>
-  <div class="quiz-box">
-    <div id="quiz-container">
-      <p id="question">クイズを始めますか？</p>
-      <button onclick="startQuiz()">スタート</button>
-    </div>
+  <div class="lang-switch">
+    <button onclick="toggleLang()">日本語 / English</button>
+  </div>
+
+  <div id="intro" class="card">
+    <h1 id="title">自己紹介</h1>
+    <p id="name">名前：中島 翼</p>
+    <p id="from">住まい：とちぎ</p>
+    <p id="sign">星座：しし座</p>
+    <p id="blood">血液型：A型</p>
+    <p id="foot">足のサイズ：27cm</p>
+    <button onclick="startQuiz()">クイズをはじめる</button>
+  </div>
+
+  <div id="quiz" class="card" style="display:none;">
+    <div id="quiz-container"></div>
     <div id="result"></div>
   </div>
 
   <script>
-    const quizData = [
-      {
-        question: "名前は？",
-        options: ["中島翼", "田中翼", "高橋翼"],
-        answer: 0
-      },
-      {
-        question: "住まいは？",
-        options: ["とちぎ", "いばらき", "ぐんま"],
-        answer: 0
-      },
-      {
-        question: "星座は？",
-        options: ["しし座", "おとめ座", "ふたご座"],
-        answer: 0
-      }
-    ];
+    let lang = "ja";
+    const quizData = {
+      ja: [
+        { q: "名前は？", opts: ["中島翼", "田中翼", "高橋翼"], ans: 0 },
+        { q: "住まいは？", opts: ["とちぎ", "いばらき", "ぐんま"], ans: 0 },
+        { q: "星座は？", opts: ["しし座", "おとめ座", "ふたご座"], ans: 0 }
+      ],
+      en: [
+        { q: "What is his name?", opts: ["Tsubasa Nakajima", "Tsubasa Tanaka", "Tsubasa Takahashi"], ans: 0 },
+        { q: "Where does he live?", opts: ["Tochigi", "Ibaraki", "Gunma"], ans: 0 },
+        { q: "What is his zodiac sign?", opts: ["Leo", "Virgo", "Gemini"], ans: 0 }
+      ]
+    };
 
     let currentQuiz = 0;
     let score = 0;
 
     function startQuiz() {
-      document.getElementById("result").textContent = "";
+      document.getElementById("intro").style.display = "none";
+      document.getElementById("quiz").style.display = "inline-block";
       showQuestion();
     }
 
     function showQuestion() {
+      const data = quizData[lang][currentQuiz];
       const quizContainer = document.getElementById("quiz-container");
-      const q = quizData[currentQuiz];
       quizContainer.innerHTML = `
-        <p>${q.question}</p>
-        ${q.options.map((opt, i) => 
-          `<button onclick='checkAnswer(${i})'>${opt}</button>`
-        ).join('')}
+        <p>${data.q}</p>
+        ${data.opts.map((opt, i) => `<button onclick='checkAnswer(${i})'>${opt}</button>`).join('')}
       `;
     }
 
     function checkAnswer(selected) {
-      const correct = quizData[currentQuiz].answer;
+      const correct = quizData[lang][currentQuiz].ans;
       const result = document.getElementById("result");
       if (selected === correct) {
-        result.textContent = "🎉 正解！";
+        result.textContent = lang === "ja" ? "🎉 正解！" : "🎉 Correct!";
         result.style.color = "#28a745";
         score++;
       } else {
-        result.textContent = "❌ 残念！";
+        result.textContent = lang === "ja" ? "❌ 残念！" : "❌ Wrong!";
         result.style.color = "#dc3545";
       }
       currentQuiz++;
-      if (currentQuiz < quizData.length) {
-        setTimeout(() => {
-          result.textContent = "";
-          showQuestion();
-        }, 1000);
+      if (currentQuiz < quizData[lang].length) {
+        setTimeout(() => { result.textContent = ""; showQuestion(); }, 1000);
       } else {
         setTimeout(showResult, 1000);
       }
@@ -117,19 +124,53 @@
     function showResult() {
       const quizContainer = document.getElementById("quiz-container");
       quizContainer.innerHTML = `
-        <p>お疲れさまでした！</p>
-        <p>あなたの正解数は <strong>${score} / ${quizData.length}</strong> です。</p>
-        <button onclick='restartQuiz()'>もう一度挑戦</button>
+        <p>${lang === "ja" ? "お疲れさまでした！" : "Good job!"}</p>
+        <p>${lang === "ja" ? "あなたの正解数は" : "Your score:"} 
+          <strong>${score} / ${quizData[lang].length}</strong>
+        </p>
+        <button onclick='restartQuiz()'>
+          ${lang === "ja" ? "もう一度挑戦" : "Try again"}
+        </button>
+        <button onclick='backToIntro()'>
+          ${lang === "ja" ? "自己紹介へ戻る" : "Back to profile"}
+        </button>
       `;
     }
 
     function restartQuiz() {
       currentQuiz = 0;
       score = 0;
-      startQuiz();
+      document.getElementById("result").textContent = "";
+      showQuestion();
+    }
+
+    function backToIntro() {
+      currentQuiz = 0;
+      score = 0;
+      document.getElementById("quiz").style.display = "none";
+      document.getElementById("intro").style.display = "inline-block";
+    }
+
+    function toggleLang() {
+      lang = lang === "ja" ? "en" : "ja";
+      if (lang === "ja") {
+        document.getElementById("title").textContent = "自己紹介";
+        document.getElementById("name").textContent = "名前：中島 翼";
+        document.getElementById("from").textContent = "住まい：とちぎ";
+        document.getElementById("sign").textContent = "星座：しし座";
+        document.getElementById("blood").textContent = "血液型：A型";
+        document.getElementById("foot").textContent = "足のサイズ：27cm";
+        document.querySelector("button[onclick='startQuiz()']").textContent = "クイズをはじめる";
+      } else {
+        document.getElementById("title").textContent = "Profile";
+        document.getElementById("name").textContent = "Name: Tsubasa Nakajima";
+        document.getElementById("from").textContent = "From: Tochigi";
+        document.getElementById("sign").textContent = "Zodiac: Leo";
+        document.getElementById("blood").textContent = "Blood type: A";
+        document.getElementById("foot").textContent = "Foot size: 27cm";
+        document.querySelector("button[onclick='startQuiz()']").textContent = "Start Quiz";
+      }
     }
   </script>
 </body>
 </html>
-
-
